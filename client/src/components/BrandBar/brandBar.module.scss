@@ -1,0 +1,14 @@
+.card {
+    text-align: center;
+    filter: drop-shadow(5px 5px 15px rgba(0, 0, 0, .25));
+
+    &:hover {
+        filter: drop-shadow(5px 5px 35px rgba(0, 0, 0, 0.25));
+    }
+
+    cursor: pointer;
+}
+
+.active {
+    background: #e5e5e5;
+}
