@@ -1,13 +1,13 @@
 import Admin from './pages/Admin';
 import Auth from './pages/Auth';
 import DevicePage from './pages/DevicePage';
-import Order from './pages/Order';
+import Basket from './pages/Basket';
 import Shop from './pages/Shop';
 import {
     ADMIN_ROUTE,
     DEVICE_ROUTE,
     LOGIN_ROUTE,
-    ORDER_ROUTE,
+    BASKET_ROUTE,
     REGISTRATION_ROUTE,
     SHOP_ROUTE,
 } from './utils/consts';
@@ -18,8 +18,8 @@ export const authRoutes = [
         Component: Admin,
     },
     {
-        path: ORDER_ROUTE,
-        Component: Order,
+        path: BASKET_ROUTE,
+        Component: Basket,
     },
 ];
 

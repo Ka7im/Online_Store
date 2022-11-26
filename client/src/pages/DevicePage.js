@@ -4,14 +4,30 @@ import star from '../assets/star.svg';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { fetchOneDevice } from '../api/axios/deviceApi';
+import {
+    createDeviceInBasket,
+    increaseDeviceInBasket,
+    getDevicesInBasket,
+} from '../api/deviceSlice';
+import { useDispatch, useSelector } from 'react-redux';
 
 const DevicePage = () => {
+    const dispatch = useDispatch();
     const [device, setDevise] = useState({ info: [] });
     const { id } = useParams();
+    let amount = useSelector(
+        (state) =>
+            state.device.basket.find((item) => {
+                return item.deviceId == id;
+            })?.amount
+    );
 
     useEffect(() => {
         fetchOneDevice(id).then((data) => setDevise(data));
+        dispatch(getDevicesInBasket());
     }, []);
+
+    console.log(amount);
 
     return (
         <Container className='mt-3'>
@@ -19,6 +35,8 @@ const DevicePage = () => {
                 <Col md={4}>
                     <Image
                         height={300}
+                        width={410}
+                        style={{ objectFit: 'contain' }}
                         src={'http://localhost:5000/' + device.img}
                     />
                 </Col>
@@ -44,9 +62,38 @@ const DevicePage = () => {
                         }}
                     >
                         <h3>{`От: ${device.price} руб.`}</h3>
-                        <Button variant='outline-dark'>
-                            Добавить в корзину
-                        </Button>
+                        {amount ? (
+                            <>
+                                <div>
+                                    <Button
+                                        variant='outline-dark'
+                                        onClick={() => {
+                                            dispatch(
+                                                increaseDeviceInBasket(id)
+                                            );
+                                        }}
+                                    >
+                                        +
+                                    </Button>{' '}
+                                    {amount}{' '}
+                                    <Button variant='outline-dark'>-</Button>
+                                </div>
+                            </>
+                        ) : (
+                            <Button
+                                variant='outline-dark'
+                                onClick={() => {
+                                    dispatch(
+                                        createDeviceInBasket({
+                                            ...device,
+                                            amount: 1,
+                                        })
+                                    );
+                                }}
+                            >
+                                Добавить в корзину
+                            </Button>
+                        )}
                     </Card>
                 </Col>
             </Row>

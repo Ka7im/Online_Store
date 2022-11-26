@@ -4,12 +4,14 @@ import CreateType from '../components/modals/CreateType';
 import CreateBrand from '../components/modals/CreateBrand';
 import CreateDevice from '../components/modals/CreateDevice';
 import DeleteType from '../components/modals/DeleteType';
+import DeleteBrand from '../components/modals/DeleteBrand';
 
 const Admin = () => {
     const [brandVisible, setBrandVisible] = useState(false);
     const [typeVisible, setTypeVisible] = useState(false);
     const [deviceVisible, setDeviceVisible] = useState(false);
     const [deleteTypeVisible, setDeleteTypeVisible] = useState(false);
+    const [deleteBrandVisible, setDeleteBrandVisible] = useState(false);
 
     return (
         <Container className='d-flex flex-column'>
@@ -37,6 +39,13 @@ const Admin = () => {
             <Button
                 variant={'outline-dark'}
                 className='mt-2 p-2'
+                onClick={() => setDeleteBrandVisible(true)}
+            >
+                Удалить бренд
+            </Button>
+            <Button
+                variant={'outline-dark'}
+                className='mt-2 p-2'
                 onClick={() => setDeviceVisible(true)}
             >
                 Добавить устройство
@@ -56,6 +65,10 @@ const Admin = () => {
             <DeleteType
                 show={deleteTypeVisible}
                 onHide={() => setDeleteTypeVisible(false)}
+            />
+            <DeleteBrand
+                show={deleteBrandVisible}
+                onHide={() => setDeleteBrandVisible(false)}
             />
         </Container>
     );

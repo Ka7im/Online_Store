@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { createBrand } from '../../api/axios/deviceApi';
+import { useDispatch } from 'react-redux';
+import { addBrand } from '../../api/deviceSlice';
 
 const CreateBrand = ({ show, onHide }) => {
-    const [value, setValue] = useState();
-    const addBrand = () => {
-        createBrand({ name: value }).then((data) => setValue(''));
+    const [value, setValue] = useState('');
+    const dispatch = useDispatch();
+    const createBrand = () => {
+        dispatch(addBrand({ name: value }));
+        setValue('');
         onHide();
     };
 
@@ -31,7 +34,7 @@ const CreateBrand = ({ show, onHide }) => {
                 <Button variant='outline-danger' onClick={onHide}>
                     Закрыть
                 </Button>
-                <Button variant='outline-success' onClick={addBrand}>
+                <Button variant='outline-success' onClick={createBrand}>
                     Добавить
                 </Button>
             </Modal.Footer>

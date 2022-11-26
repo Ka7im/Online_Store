@@ -8,12 +8,17 @@ import {
     fetchDevices,
     createDevice,
     deleteType,
+    deleteBrand,
+    createBasketDevice,
+    increaseBasketDevice,
+    getBasketDevices,
 } from './axios/deviceApi';
 
 const initialState = {
     types: [],
     brands: [],
     devices: [],
+    basket: [],
     selectedType: {},
     selectedBrand: {},
     currentPage: 1,
@@ -21,18 +26,47 @@ const initialState = {
     limit: 8,
 };
 
-export const addType = createAsyncThunk('device/addType', async ({ type }) => {
+export const getDevicesInBasket = createAsyncThunk(
+    'device/getDevicesInBasket',
+    async () => {
+        return await getBasketDevices();
+    }
+);
+
+export const createDeviceInBasket = createAsyncThunk(
+    'device/createDeviceInBasket',
+    async (device) => {
+        return await createBasketDevice(device);
+    }
+);
+
+export const increaseDeviceInBasket = createAsyncThunk(
+    'device/increaseDeviceInBasket',
+    async (deviceId) => {
+        return await increaseBasketDevice({ deviceId });
+    }
+);
+
+export const addType = createAsyncThunk('device/addType', async (type) => {
     return await createType(type);
+});
+
+export const removeType = createAsyncThunk('device/removeType', async (id) => {
+    return await deleteType(id);
 });
 
 export const getTypes = createAsyncThunk('device/getTypes', async () => {
     return await fetchTypes();
 });
 
-export const addBrand = createAsyncThunk(
-    'device/addBrand',
-    async ({ brand }) => {
-        return await createBrand(brand);
+export const addBrand = createAsyncThunk('device/addBrand', async (brand) => {
+    return await createBrand(brand);
+});
+
+export const removeBrand = createAsyncThunk(
+    'device/removeBrand',
+    async (id) => {
+        return await deleteBrand(id);
     }
 );
 
@@ -87,6 +121,29 @@ const deviceSlice = createSlice({
             })
             .addCase(addDevice.fulfilled, (state, action) => {
                 state.devices.push(action.payload);
+            })
+            .addCase(removeType.fulfilled, (state, action) => {
+                const index = state.types.indexOf(action.payload);
+                state.types.splice(index, 1);
+            })
+            .addCase(removeBrand.fulfilled, (state, action) => {
+                const index = state.brands.indexOf(action.payload);
+                state.brands.splice(index, 1);
+            })
+            .addCase(createDeviceInBasket.fulfilled, (state, action) => {
+                state.basket.push(action.payload);
+            })
+            .addCase(increaseDeviceInBasket.fulfilled, (state, action) => {
+                state.basket = state.basket.map((item) => {
+                    if (action.payload.deviceId == item.deviceId) {
+                        return { ...item, amount: action.payload.amount };
+                    }
+
+                    return item;
+                });
+            })
+            .addCase(getDevicesInBasket.fulfilled, (state, action) => {
+                state.basket = action.payload;
             });
     },
 });

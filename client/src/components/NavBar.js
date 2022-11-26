@@ -2,8 +2,8 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
     ADMIN_ROUTE,
+    BASKET_ROUTE,
     LOGIN_ROUTE,
-    REGISTRATION_ROUTE,
     SHOP_ROUTE,
 } from '../utils/consts';
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +14,7 @@ import cart from '../assets/cart.svg';
 
 const NavBar = () => {
     const isAuth = useSelector((state) => state.user.isAuth);
+    const role = useSelector((state) => state.user.user.role);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -33,14 +34,20 @@ const NavBar = () => {
                 <Nav className='ml-auto' style={{ color: 'white' }}>
                     {isAuth ? (
                         <>
-                            <Image src={cart} style={{ cursor: 'pointer' }} />
-                            <Button
-                                variant={'outline-light'}
-                                className='ms-2'
-                                onClick={() => navigate(ADMIN_ROUTE)}
-                            >
-                                Админ панель
-                            </Button>
+                            <Image
+                                src={cart}
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(BASKET_ROUTE)}
+                            />
+                            {role === 'ADMIN' ? (
+                                <Button
+                                    variant={'outline-light'}
+                                    className='ms-2'
+                                    onClick={() => navigate(ADMIN_ROUTE)}
+                                >
+                                    Админ панель
+                                </Button>
+                            ) : null}
                             <Button
                                 variant={'outline-light'}
                                 className='ms-2'

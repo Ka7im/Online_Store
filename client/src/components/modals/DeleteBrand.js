@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Modal, Button, Dropdown } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeType } from '../../api/deviceSlice';
+import { removeBrand } from '../../api/deviceSlice';
 
-const DeleteType = ({ show, onHide }) => {
-    const types = useSelector((state) => state.device.types);
-    const [type, setType] = useState();
+const DeleteBrand = ({ show, onHide }) => {
+    const brands = useSelector((state) => state.device.brands);
+    const [brand, setBrand] = useState();
     const dispatch = useDispatch();
 
-    const deleteType = (id) => {
-        dispatch(removeType(id));
+    const deleteBrand = (id) => {
+        dispatch(removeBrand(id));
         onHide();
     };
 
@@ -17,25 +17,25 @@ const DeleteType = ({ show, onHide }) => {
         <Modal size='lg' onHide={onHide} centered show={show}>
             <Modal.Header closeButton>
                 <Modal.Title id='contained-modal-title-vcenter'>
-                    Удалить тип
+                    Удалить бренд
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Dropdown className='mt-3'>
                     <Dropdown.Toggle>
-                        {type?.name || 'Выберите тип'}
+                        {brand?.name || 'Выберите тип'}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
-                        {types.map((type) => {
-                            if (type.name === 'Все') {
+                        {brands.map((brand) => {
+                            if (brand.name === 'Все') {
                                 return null;
                             } else {
                                 return (
                                     <Dropdown.Item
-                                        key={type.id}
-                                        onClick={() => setType(type)}
+                                        key={brand.id}
+                                        onClick={() => setBrand(brand)}
                                     >
-                                        {type.name}
+                                        {brand.name}
                                     </Dropdown.Item>
                                 );
                             }
@@ -49,7 +49,7 @@ const DeleteType = ({ show, onHide }) => {
                 </Button>
                 <Button
                     variant='outline-success'
-                    onClick={() => deleteType(type.id)}
+                    onClick={() => deleteBrand(brand.id)}
                 >
                     Удалить
                 </Button>
@@ -58,4 +58,4 @@ const DeleteType = ({ show, onHide }) => {
     );
 };
 
-export default DeleteType;
+export default DeleteBrand;

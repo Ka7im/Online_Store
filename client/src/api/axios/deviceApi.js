@@ -1,5 +1,20 @@
 import { $authHost, $host } from './index';
 
+export const getBasketDevices = async () => {
+    const { data } = await $authHost.get('api/basket');
+    return data;
+};
+
+export const increaseBasketDevice = async (deviceId) => {
+    const { data } = await $authHost.patch('api/basket/increase', deviceId);
+    return data;
+};
+
+export const createBasketDevice = async (device) => {
+    const { data } = await $authHost.post('api/basket', device);
+    return data;
+};
+
 export const createType = async (type) => {
     const { data } = await $authHost.post('api/type', type);
     return data;
@@ -17,6 +32,11 @@ export const fetchTypes = async () => {
 
 export const createBrand = async (brand) => {
     const { data } = await $authHost.post('api/brand', brand);
+    return data;
+};
+
+export const deleteBrand = async (id) => {
+    const { data } = await $authHost.delete('api/brand', { data: { id } });
     return data;
 };
 

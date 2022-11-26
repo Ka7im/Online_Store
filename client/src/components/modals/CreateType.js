@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { createType } from '../../api/axios/deviceApi';
+import { addType } from '../../api/deviceSlice';
+import { useDispatch } from 'react-redux';
 
 const CreateType = ({ show, onHide }) => {
-    const [value, setValue] = useState();
-    const addType = () => {
-        createType({ name: value }).then((data) => setValue(''));
+    const [value, setValue] = useState('');
+    const dispatch = useDispatch();
+    const createType = () => {
+        dispatch(addType({ name: value }));
+        setValue('');
         onHide();
     };
 
@@ -29,7 +32,7 @@ const CreateType = ({ show, onHide }) => {
                 <Button variant='outline-danger' onClick={onHide}>
                     Закрыть
                 </Button>
-                <Button variant='outline-success' onClick={addType}>
+                <Button variant='outline-success' onClick={createType}>
                     Добавить
                 </Button>
             </Modal.Footer>
