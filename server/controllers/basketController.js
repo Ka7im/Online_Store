@@ -13,7 +13,11 @@ class BasketController {
         const { deviceId } = req.body;
 
         let { amount } = await BasketDevice.findOne({ where: { deviceId } });
-        amount++;
+
+        if (amount < 50) {
+            amount++;
+        }
+
         await BasketDevice.update(
             { amount },
             {
@@ -30,7 +34,31 @@ class BasketController {
             include: Device,
         });
 
-        return res.json(basketDevices);
+        return res.json(
+            basketDevices.map((item) => {
+                return { ...item.device.dataValues, amount: item.amount };
+            })
+        );
+    }
+
+    async decrease(req, res) {
+        const { deviceId } = req.body;
+
+        let { amount } = await BasketDevice.findOne({ where: { deviceId } });
+
+        if (amount > 0) {
+            amount--;
+        }
+
+        await BasketDevice.update(
+            { amount },
+            {
+                where: {
+                    deviceId,
+                },
+            }
+        );
+        return res.json({ deviceId, amount });
     }
 }
 

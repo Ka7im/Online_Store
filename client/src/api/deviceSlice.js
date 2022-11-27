@@ -12,6 +12,7 @@ import {
     createBasketDevice,
     increaseBasketDevice,
     getBasketDevices,
+    decreaseBasketDevice,
 } from './axios/deviceApi';
 
 const initialState = {
@@ -44,6 +45,13 @@ export const increaseDeviceInBasket = createAsyncThunk(
     'device/increaseDeviceInBasket',
     async (deviceId) => {
         return await increaseBasketDevice({ deviceId });
+    }
+);
+
+export const decreaseDeviceInBasket = createAsyncThunk(
+    'device/decreaseDeviceInBasket',
+    async (deviceId) => {
+        return await decreaseBasketDevice({ deviceId });
     }
 );
 
@@ -135,7 +143,7 @@ const deviceSlice = createSlice({
             })
             .addCase(increaseDeviceInBasket.fulfilled, (state, action) => {
                 state.basket = state.basket.map((item) => {
-                    if (action.payload.deviceId == item.deviceId) {
+                    if (action.payload.deviceId == item.id) {
                         return { ...item, amount: action.payload.amount };
                     }
 
@@ -144,6 +152,15 @@ const deviceSlice = createSlice({
             })
             .addCase(getDevicesInBasket.fulfilled, (state, action) => {
                 state.basket = action.payload;
+            })
+            .addCase(decreaseDeviceInBasket.fulfilled, (state, action) => {
+                state.basket = state.basket.map((item) => {
+                    if (action.payload.deviceId == item.id) {
+                        return { ...item, amount: action.payload.amount };
+                    }
+
+                    return item;
+                });
             });
     },
 });

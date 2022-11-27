@@ -7,18 +7,19 @@ import { fetchOneDevice } from '../api/axios/deviceApi';
 import {
     createDeviceInBasket,
     increaseDeviceInBasket,
+    decreaseDeviceInBasket,
     getDevicesInBasket,
 } from '../api/deviceSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 const DevicePage = () => {
     const dispatch = useDispatch();
     const [device, setDevise] = useState({ info: [] });
     const { id } = useParams();
-    let amount = useSelector(
+    const amount = useSelector(
         (state) =>
             state.device.basket.find((item) => {
-                return item.deviceId == id;
+                return item.id == id;
             })?.amount
     );
 
@@ -26,8 +27,6 @@ const DevicePage = () => {
         fetchOneDevice(id).then((data) => setDevise(data));
         dispatch(getDevicesInBasket());
     }, []);
-
-    console.log(amount);
 
     return (
         <Container className='mt-3'>
@@ -76,7 +75,16 @@ const DevicePage = () => {
                                         +
                                     </Button>{' '}
                                     {amount}{' '}
-                                    <Button variant='outline-dark'>-</Button>
+                                    <Button
+                                        variant='outline-dark'
+                                        onClick={() => {
+                                            dispatch(
+                                                decreaseDeviceInBasket(id)
+                                            );
+                                        }}
+                                    >
+                                        -
+                                    </Button>
                                 </div>
                             </>
                         ) : (

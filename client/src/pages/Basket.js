@@ -28,10 +28,10 @@ const Basket = () => {
                                 height={150}
                                 width={200}
                                 style={{ objectFit: 'contain' }}
-                                src={'http://localhost:5000/' + item.device.img}
+                                src={'http://localhost:5000/' + item.img}
                             />
                             <div style={{ marginLeft: '10px' }}>
-                                {item.device.name}
+                                {item.name}
                             </div>
                             <br />
                             <div style={{ marginLeft: '10px' }}>

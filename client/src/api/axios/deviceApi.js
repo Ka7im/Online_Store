@@ -10,6 +10,11 @@ export const increaseBasketDevice = async (deviceId) => {
     return data;
 };
 
+export const decreaseBasketDevice = async (deviceId) => {
+    const { data } = await $authHost.patch('api/basket/decrease', deviceId);
+    return data;
+};
+
 export const createBasketDevice = async (device) => {
     const { data } = await $authHost.post('api/basket', device);
     return data;
